@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        TERRAFORM_DIR = "${WORKSPACE}/terraform"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/pavithra-m13/Docker_terraform_Pipeline.git'  
+            }
+        }
+
+        stage('Initialize Terraform') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Apply Terraform (Deploy Containers)') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Deploy Website to Apache') {
+            steps {
+                sh '''
+                docker exec apache-container rm -rf /usr/local/apache2/htdocs/*
+                docker cp public-html/. apache-container:/usr/local/apache2/htdocs/
+                docker restart apache-container
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+    }
+}
