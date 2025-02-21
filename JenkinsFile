@@ -12,34 +12,7 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/pavithra-m13/Docker_terraform_Pipeline.git'
             }
         }
-
-        stage('Initialize Terraform') {
-            steps {
-                 sh '''
-                    echo "Resolved WORKSPACE path: $(pwd)"
-                    echo "Checking Terraform directory: $(pwd)/terraform"
-                    
-                    if [ ! -d "terraform" ]; then
-                        echo "Terraform directory not found: $(pwd)/terraform"
-                        exit 1
-                    fi
-                    
-                    echo "Initializing Terraform..."
-                    cd terraform
-                    $TERRAFORM_DIR init
-                    $TERRAFORM_DIR apply -auto-approve
-                '''
-            }
-        }
-
-        stage('Apply Terraform (Deploy Containers)') {
-            steps {
-                dir('terraform') {
-                    sh '$TERRAFORM_DIR apply -auto-approve'
-                }
-            }
-        }
-
+       
         stage('Deploy Website to Apache') {
             steps {
                 sh '''
