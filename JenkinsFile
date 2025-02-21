@@ -14,13 +14,7 @@ pipeline {
 
         stage('Initialize Terraform') {
             steps {
-                sh '''
-                    echo "Resolved WORKSPACE path: $(pwd)"
-                    echo "Checking Terraform directory: $(pwd)/terraform"
-                    echo "Initializing Terraform..."
-                    cd terraform
-                    $TERRAFORM_DIR init
-                '''
+                sh '/usr/bin/terraform init'
             }
         }
 
