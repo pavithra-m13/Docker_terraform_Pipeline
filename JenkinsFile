@@ -15,18 +15,12 @@ pipeline {
        
         stage('Deploy Website to Apache') {
             steps {
-                sh '''
-                docker exec apache-container rm -rf /usr/local/apache2/htdocs/*
-                docker cp public-html/. apache-container:/usr/local/apache2/htdocs/
-                docker restart apache-container
-                '''
+            sh   '''echo "Deploying to Apache server..."
+                    sudo cp -r apache/public-html/* /var/www/html/
+                    sudo systemctl restart apache2'''
             }
         }
 
-        stage('Verify Deployment') {
-            steps {
-                sh 'docker ps'
-            }
-        }
+        
     }
 }
