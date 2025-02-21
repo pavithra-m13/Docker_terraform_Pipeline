@@ -14,16 +14,20 @@ pipeline {
 
         stage('Initialize Terraform') {
             steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                }
+                sh '''
+                    echo "Resolved WORKSPACE path: $(pwd)"
+                    echo "Checking Terraform directory: $(pwd)/terraform"
+                    echo "Initializing Terraform..."
+                    cd terraform
+                    $TERRAFORM_DIR init
+                '''
             }
         }
 
         stage('Apply Terraform (Deploy Containers)') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply -auto-approve'
+                    sh '$TERRAFORM_DIR apply -auto-approve'
                 }
             }
         }
