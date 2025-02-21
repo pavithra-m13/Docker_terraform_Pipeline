@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        
         TERRAFORM_DIR = "/usr/bin/terraform"
     }
 
