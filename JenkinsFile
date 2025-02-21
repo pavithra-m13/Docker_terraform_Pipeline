@@ -16,8 +16,8 @@ pipeline {
         stage('Deploy Website to Apache') {
             steps {
             sh   '''echo "Deploying to Apache server..."
-                    sudo cp -r apache/public-html/* /var/www/html/
-                    sudo systemctl restart apache2'''
+                    su cp -r apache/public-html/* /var/www/html/
+                    su systemctl restart apache2'''
             }
         }
 
