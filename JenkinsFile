@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        TERRAFORM_DIR = "${WORKSPACE}/terraform"
+        TERRAFORM_DIR = "/usr/local/bin/terraform"
     }
 
     stages {
