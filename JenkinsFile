@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         
-        TERRAFORM_DIR = "/usr/bin/terraform"
+        TERRAFORM_DIR = "/usr/local/bin/terraform"
     }
 
     stages {
