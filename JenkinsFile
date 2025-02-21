@@ -15,7 +15,20 @@ pipeline {
 
         stage('Initialize Terraform') {
             steps {
-                sh '/usr/bin/terraform terraform init'
+                 sh '''
+                    echo "Resolved WORKSPACE path: $(pwd)"
+                    echo "Checking Terraform directory: $(pwd)/terraform"
+                    
+                    if [ ! -d "terraform" ]; then
+                        echo "Terraform directory not found: $(pwd)/terraform"
+                        exit 1
+                    fi
+                    
+                    echo "Initializing Terraform..."
+                    cd terraform
+                    $TERRAFORM_DIR init
+                    $TERRAFORM_DIR apply -auto-approve
+                '''
             }
         }
 
