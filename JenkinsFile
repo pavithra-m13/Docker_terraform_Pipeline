@@ -13,13 +13,16 @@ pipeline {
             }
         }
        
-        stage('Deploy Website to Apache') {
-            steps {
-            sh   '''echo "Deploying to Apache server..."
-                    su cp -r apache/public-html/* /var/www/html/
-                    su systemctl restart apache2'''
-            }
-        }
+       stage('Deploy Website to Apache') {
+    steps {
+        sh '''
+            echo "Deploying to Apache server..."
+            docker cp apache/public-html/. apache-container:/usr/local/apache2/htdocs/
+            docker restart apache-container
+        '''
+    }
+}
+
 
         
     }
