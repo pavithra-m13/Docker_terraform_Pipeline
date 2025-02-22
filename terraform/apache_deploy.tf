@@ -10,6 +10,6 @@ resource "docker_container" "apache_server" {
 
   ports {
     internal = 80
-    external = 8080
+    external = 8081
   }
 }
