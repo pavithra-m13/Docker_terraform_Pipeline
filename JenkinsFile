@@ -48,7 +48,7 @@ pipeline {
             steps {
                 echo 'Deploying website files to Apache server...'
                 sh '''
-                    docker cp apache/public-html/. ${CONTAINER_NAME}:/usr/local/apache2/htdocs/
+                    docker cp ./public-html/. ${CONTAINER_NAME}:/usr/local/apache2/htdocs/
                     docker restart ${CONTAINER_NAME}
                 '''
             }
