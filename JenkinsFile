@@ -5,7 +5,7 @@ pipeline {
         REPO_URL = 'https://github.com/pavithra-m13/Docker_terraform_Pipeline.git'
         IMAGE_NAME = 'my-apache'
         CONTAINER_NAME = 'apache-container'
-        APACHE_PORT = '8080'
+        APACHE_PORT = '8081'
     }
 
     stages {
