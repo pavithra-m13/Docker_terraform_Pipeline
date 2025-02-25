@@ -31,7 +31,7 @@ pipeline {
             steps {
                 echo 'Deploying website files to Apache server...'
                 sh '''
-                    docker run -d --name "server12" -p 8081:80 ${IMAGE_NAME} 
+                    docker run -d --name "server12" -p 80:80 ${IMAGE_NAME} 
                 '''
             }
         }
