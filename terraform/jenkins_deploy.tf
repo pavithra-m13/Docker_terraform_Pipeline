@@ -1,30 +1,52 @@
-resource "docker_image" "jenkins" {
-  name = "jenkins/jenkins:lts-jdk17"
-}
-resource "docker_container" "jenkins_server" {
-  image = docker_image.jenkins.image_id
-  name  = "jenkins-container"
+pipeline {
+    agent any
 
-  ports {
-    internal = 8080
-    external = 9091
-  }
+    environment {
+        REPO_URL = 'https://github.com/pavithra-m13/Docker_terraform_Pipeline.git'
+        IMAGE_NAME = 'my-apache'
+        CONTAINER_NAME = 'apache-container'
+        APACHE_PORT = '8081'
+    }
 
-  volumes {
-    host_path      = "/var/jenkins_home"
-    container_path = "/var/jenkins_home"
-  }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo 'Cloning Git Repository...'
+                git branch: 'master', url: REPO_URL
+            }
+        }
 
-  # Mount Docker socket to allow Jenkins to use host's Docker
-  volumes {
-    host_path      = "/var/run/docker.sock"
-    container_path = "/var/run/docker.sock"
-  }
-  # Mount the Docker CLI binary (so Jenkins can use the `docker` command)
-  volumes {
-    host_path      = "/usr/bin/docker"
-    container_path = "/usr/bin/docker"
-  }
-  privileged   = true
-  restart      = "always"
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Apache Docker Image...'
+                sh '''
+                    docker build -t ${IMAGE_NAME} .
+                '''
+            }
+        }
+
+        stage('Run Apache Container') {
+            steps {
+                echo 'Stopping and removing any existing Apache container...'
+                sh '''
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                '''
+                
+                echo 'Starting Apache container from the built image...'
+                sh '''
+                    docker run -d --name ${CONTAINER_NAME} -p ${APACHE_PORT}:80 ${IMAGE_NAME}
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful! Website is available at http://localhost:${APACHE_PORT}'
+        }
+        failure {
+            echo 'Deployment Failed! Check the logs for details.'
+        }
+    }
 }
