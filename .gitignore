@@ -1,0 +1,37 @@
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform lock file
+.terraform.lock.hcl
+
+# Terraform plan files
+*.tfplan
+
+# Terraform module and provider cache
+.terraform/
+
+# Ignore override files (used for local configurations)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore sensitive variable files
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+
+# Ignore logs and temporary files
+*.log
+*.backup
+.DS_Store
+Thumbs.db
+
+# Ignore Terraform-generated provider plugins and modules
+.terraform/providers/
+.terraform/plugins/
+
+# Ignore build-related files
+*.swp
+*.bak
