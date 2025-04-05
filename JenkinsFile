@@ -8,6 +8,7 @@ pipeline {
         APACHE_PORT = '8081'
         SONARQUBE_URL = 'http://172.27.222.147:9000'  
         SONARQUBE_PROJECT_KEY = 'pavithra'
+        SONARQUBE_PROJECT_NAME = 'pavithra'
     }
 
     stages {
@@ -18,18 +19,18 @@ pipeline {
             }
         }
 
-         stage('Code Analysis with SonarQube') {
+        stage('Code Analysis with SonarQube') {
             steps {
-                echo 'Performing code analysis with SonarQube...'
+                echo 'Running SonarQube Analysis...'
                 script {
-                    def sonarResult = sh(script: """
-                        docker run --rm \
-                            -v \$(pwd):/usr/src/myapp \
-                            -v /tmp/.sonar:/opt/sonar-scanner/.sonar \
-                            -e SONARQUBE_URL=${SONARQUBE_URL} \
-                            -e SONAR_PROJECT_KEY=${SONARQUBE_PROJECT_KEY} \
-                            sonarsource/sonar-scanner-cli
-                    """, returnStatus: true)
+                    // Run the SonarQube scanner to analyze the code
+                    sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} \
+                          -Dsonar.projectName=${SONARQUBE_PROJECT_NAME} \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=${SONARQUBE_URL}
+                    '''
                 }
             }
         }
