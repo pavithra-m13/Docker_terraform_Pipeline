@@ -6,6 +6,8 @@ pipeline {
         IMAGE_NAME = 'my-apache'
         CONTAINER_NAME = 'apache-container'
         APACHE_PORT = '8081'
+        SONARQUBE_URL = 'http://172.27.222.147:9000'  
+        SONARQUBE_PROJECT_KEY = 'pavithra'
     }
 
     stages {
@@ -13,6 +15,22 @@ pipeline {
             steps {
                 echo 'Cloning Git Repository...'
                 git branch: 'master', url: REPO_URL
+            }
+        }
+
+         stage('Code Analysis with SonarQube') {
+            steps {
+                echo 'Performing code analysis with SonarQube...'
+                script {
+                    def sonarResult = sh(script: """
+                        docker run --rm \
+                            -v \$(pwd):/usr/src/myapp \
+                            -v /tmp/.sonar:/opt/sonar-scanner/.sonar \
+                            -e SONARQUBE_URL=${SONARQUBE_URL} \
+                            -e SONAR_PROJECT_KEY=${SONARQUBE_PROJECT_KEY} \
+                            sonarsource/sonar-scanner-cli
+                    """, returnStatus: true)
+                }
             }
         }
 
