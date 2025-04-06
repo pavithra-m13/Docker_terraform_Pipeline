@@ -21,13 +21,12 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
+             steps {
                 withSonarQubeEnv("${SONARQUBE_ENV}") {
-                    sh 'sonar-scanner -Dsonar.projectKey=pavithra -Dsonar.projectName=pavithra -Dsonar.sources=.'
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh 'sonar-scanner -Dsonar.projectKey=pavithra -Dsonar.sources=. -Dsonar.token=$SONAR_TOKEN'
+                    }
                 }
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
