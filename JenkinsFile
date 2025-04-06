@@ -9,6 +9,7 @@ pipeline {
         SONARQUBE_URL = 'http://172.27.222.147:9000'  
         SONARQUBE_PROJECT_KEY = 'pavithra'
         SONARQUBE_PROJECT_NAME = 'pavithra'
+        SONARQUBE_ENV = 'sonar-qube'
     }
 
     tools {
@@ -25,7 +26,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonar-qube') { // Name of your SonarQube server in Jenkins settings
+                withSonarQubeEnv("${SONARQUBE_ENV}") {
                     sh 'sonar-scanner -Dsonar.projectKey=pavithra -Dsonar.projectName=pavithra -Dsonar.sources=.'
                 }
             }
