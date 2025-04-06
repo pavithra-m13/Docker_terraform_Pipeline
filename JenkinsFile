@@ -12,9 +12,6 @@ pipeline {
         SONARQUBE_ENV = 'sonar-qube'
     }
 
-    tools {
-        sonarQubeScanner 'sonar-scanner' // Use the name configured above
-    }
 
     stages {
         stage('Clone Repository') {
