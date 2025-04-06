@@ -11,6 +11,10 @@ pipeline {
         SONARQUBE_PROJECT_NAME = 'pavithra'
     }
 
+    tools {
+        sonarQubeScanner 'SonarScanner' // Use the name configured above
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -19,18 +23,10 @@ pipeline {
             }
         }
 
-        stage('Code Analysis with SonarQube') {
+        stage('SonarQube Analysis') {
             steps {
-                echo 'Running SonarQube Analysis...'
-                script {
-                    // Run the SonarQube scanner to analyze the code
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY} \
-                          -Dsonar.projectName=${SONARQUBE_PROJECT_NAME} \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=${SONARQUBE_URL}
-                    '''
+                withSonarQubeEnv('sonar-qube') { // Name of your SonarQube server in Jenkins settings
+                    sh 'sonar-scanner -Dsonar.projectKey=pavithra -Dsonar.projectName=pavithra -Dsonar.sources=.'
                 }
             }
         }
